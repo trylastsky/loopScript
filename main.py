@@ -40,7 +40,6 @@ def bind_key():
     console.print("Нажмите ESC для отмены", style="yellow")
     console.print("\nОжидание нажатия клавиши...", style="green")
 
-    # Временно убираем все горячие клавиши
     keyboard.unhook_all_hotkeys()
     
     recorded_key = None
@@ -48,58 +47,48 @@ def bind_key():
     def on_key_event(e):
         nonlocal recorded_key
         if e.event_type == keyboard.KEY_DOWN:
-            # Игнорируем модификаторы (Ctrl, Alt, Shift)
             if e.name in ['ctrl', 'alt', 'shift', 'windows']:
                 return
-            if e.name == 'esc':  # Отмена при нажатии ESC
+            if e.name == 'esc':
                 recorded_key = 'esc'
                 return False
             recorded_key = e.name
-            return False  # Останавливаем запись
+            return False
     
-    # Начинаем запись нажатия
     keyboard.hook(on_key_event)
     
-    # Ждем пока пользователь нажмет клавишу (без таймаута)
     while recorded_key is None:
         time.sleep(0.1)
     
-    keyboard.unhook_all()  # Останавливаем запись
+    keyboard.unhook_all()
     
     if recorded_key == 'esc':
         console.print("Отмена привязки", style="yellow")
         time.sleep(1)
-        # Восстанавливаем горячие клавиши
         if current_hotkey:
             keyboard.add_hotkey(current_hotkey, move_cursor_to_center)
         keyboard.add_hotkey('pause', toggle_pause)
         return
     
-    # Удаляем предыдущую привязку
     if current_hotkey:
         try:
             keyboard.remove_hotkey(current_hotkey)
         except:
             pass
     
-    # Создаем новую привязку
     try:
         keyboard.add_hotkey(recorded_key, move_cursor_to_center)
         current_hotkey = recorded_key
-        
         console.print(f"✅ Успешная привязка клавиши '{recorded_key}'!", style="bold green")
-        
     except Exception as e:
         console.print(f"Ошибка при создании горячей клавиши: {e}", style="red")
     
-    # Всегда восстанавливаем паузу
     keyboard.add_hotkey('pause', toggle_pause)
     
     console.print("\nНажмите ENTER чтобы вернуться в меню...", style="yellow")
     
-    # Ждем конкретно ENTER для возврата и очищаем буфер
     keyboard.wait('enter')
-    time.sleep(0.5)  # Небольшая пауза для стабилизации
+    time.sleep(0.5)
 
 def delete_binding():
     global current_hotkey
@@ -118,9 +107,8 @@ def delete_binding():
     
     console.print("\nНажмите ENTER чтобы вернуться в меню...", style="yellow")
     
-    # Ждем конкретно ENTER для возврата и очищаем буфер
     keyboard.wait('enter')
-    time.sleep(0.5)  # Небольшая пауза для стабилизации
+    time.sleep(0.5)
 
 def toggle_pause():
     global paused
@@ -129,7 +117,6 @@ def toggle_pause():
     console.print(f"\nСкрипт {state}.", style="yellow")
 
 def clear_input_buffer():
-    """Очищает буфер ввода"""
     try:
         import msvcrt
         while msvcrt.kbhit():
@@ -141,13 +128,11 @@ def display_menu():
     while True:
         logo()
         
-        # Показываем текущую привязку
         if current_hotkey:
             console.print(f"Текущая привязка: [green]{current_hotkey}[/green]")
         else:
             console.print("Текущая привязка: [red]нет[/red]")
         
-        # Очищаем буфер перед показом меню
         clear_input_buffer()
         time.sleep(0.1)
         
@@ -172,15 +157,12 @@ def display_menu():
             
             if action == "Привязать кнопку":
                 bind_key()
-                # После возврата из bind_key продолжаем цикл меню
                 continue
             elif action == "Отвязать кнопку":
                 delete_binding()
-                # После возврата из delete_binding продолжаем цикл меню
                 continue
             elif action == "Выход":
                 console.print("Выход из программы...", style="bold green")
-                # Сохраняем привязку в файл перед выходом
                 if current_hotkey:
                     try:
                         with open('hotkey.txt', 'w') as f:
@@ -196,7 +178,6 @@ def display_menu():
             console.print(f"Ошибка: {e}", style="bold red")
 
 def load_saved_hotkey():
-    """Загружает сохраненную привязку из файла"""
     global current_hotkey
     try:
         if os.path.exists('hotkey.txt'):
@@ -210,9 +191,7 @@ def load_saved_hotkey():
         pass
 
 if __name__ == "__main__":
-    # Загружаем сохраненную привязку при запуске
     load_saved_hotkey()
-    
     keyboard.add_hotkey('pause', toggle_pause)
 
     try:
