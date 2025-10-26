@@ -163,6 +163,8 @@ def toggle_pause():
     paused = not paused
     state = "приостановлен" if paused else "возобновлён"
     console.print(f"\nСкрипт {state}.", style="yellow")
+    if not paused and current_hotkey and current_hotkey.startswith('mouse_'):
+        mouse_handler.setup_mouse_hotkey(current_hotkey, move_cursor_to_center)
 
 def clear_input_buffer():
     try:
@@ -181,7 +183,6 @@ def display_menu():
             console.print(f"Текущая привязка: [green]{key_name}[/green]")
         else:
             console.print("Текущая привязка: [red]нет[/red]")
-        
         clear_input_buffer()
         time.sleep(0.1)
         
