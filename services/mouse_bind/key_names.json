@@ -1,0 +1,18 @@
+{
+    "mouse_left": "Левая кнопка мыши",
+    "mouse_right": "Правая кнопка мыши",
+    "mouse_middle": "Средняя кнопка мыши",
+    "mouse_button4": "Кнопка мыши 4",
+    "mouse_button5": "Кнопка мыши 5",
+    "mouse_button6": "Кнопка мыши 6",
+    "mouse_button7": "Кнопка мыши 7",
+    "mouse_button8": "Кнопка мыши 8",
+    "mouse_button9": "Кнопка мыши 9",
+    "mouse_button10": "Кнопка мыши 10",
+    "mouse_x1": "Кнопка мыши X1",
+    "mouse_x2": "Кнопка мыши X2",
+    "space": "Пробел",
+    "esc": "Escape",
+    "enter": "Enter",
+    "pause": "Pause"
+}
