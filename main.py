@@ -148,6 +148,8 @@ def delete_binding():
         try:
             remove_hotkey(current_hotkey)
             current_hotkey = None
+            if os.path.exists('hotkey.txt'):
+                os.remove('hotkey.txt')
             console.print("✅ Успешная отвязка!", style="bold green")
         except Exception as e:
             console.print(f"Ошибка при удалении привязки: {e}", style="red")
