@@ -12,6 +12,7 @@ console = Console()
 
 paused = False
 current_hotkey = None
+status_zoom = False
 mouse_handler = MouseHandler()
 
 def logo():
@@ -25,6 +26,7 @@ def logo():
     )
 
 def move_cursor_to_center():
+    global status_zoom
     if not paused:
         try:
             mouse_handler.stop_listener()
@@ -40,7 +42,12 @@ def move_cursor_to_center():
             else:
                 console.print("Файл MoveCursor.ps1 не найден", style="red")
                 return
-            pyautogui.hotkey('ctrl', 'alt', '-')
+            if status_zoom == False:
+                status_zoom = True
+                pyautogui.hotkey('win','+')
+            else:
+                status_zoom = False
+                pyautogui.hotkey('win','-')
         except Exception as e:
             console.print(f"Ошибка при выполнении действия: {e}", style="red")
         finally:
